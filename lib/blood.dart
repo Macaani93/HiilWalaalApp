@@ -230,7 +230,13 @@ class blood extends StatelessWidget {
                                             BorderRadius.circular(24.0),
                                       ),
                                     ),
-                                    onPressed: () => {},
+                                    onPressed: () => {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  seekerForm()))
+                                    },
                                     icon: Icon(
                                       Icons.search,
                                       color: Colors.white,

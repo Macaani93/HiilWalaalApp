@@ -224,8 +224,7 @@ import 'package:http/http.dart' as http;
 class DonorForm extends StatelessWidget {
   DonorForm({Key? key}) : super(key: key);
 
-  final 
-  _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   String _name = "";
   String _phone = "";
@@ -295,6 +294,12 @@ class DonorForm extends StatelessWidget {
                   onChanged: (value) {
                     _phone = value;
                   },
+                  keyboardType:
+                      TextInputType.number, // Only allows numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter
+                        .digitsOnly // Restrict input to digits only
+                  ],
                 ),
                 SizedBox(height: 16.0),
                 TextFormField(

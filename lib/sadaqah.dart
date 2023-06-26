@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -62,7 +63,47 @@ class _SadaqahFormState extends State<SadaqahForm> {
     // Handle the response from the API endpoint
     if (response.statusCode == 200) {
       // The request was successful
-      print(response.body);
+      var responseJson = json.decode(response.body);
+
+// Extract the value of STATE from the response message
+      var responseMsg = responseJson['responseMsg'];
+      var stateStartIndex = responseMsg.indexOf('(STATE: ') + '(STATE: '.length;
+      var stateEndIndex = responseMsg.indexOf(',', stateStartIndex);
+      var state = responseMsg.substring(stateStartIndex, stateEndIndex);
+
+      print(state);
+      ;
+      if (state == 'declined') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.ERROR,
+          animType: AnimType.RIGHSLIDE,
+          title: 'Donor Registeration',
+          desc: state,
+          // btnCancelOnPress: () {},
+          btnOkOnPress: () {},
+        ).show();
+      } else if (state == 'rejected') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.WARNING,
+          animType: AnimType.RIGHSLIDE,
+          title: 'Donor Registeration',
+          desc: state,
+          // btnCancelOnPress: () {},
+          btnOkOnPress: () {},
+        ).show();
+      } else {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.SUCCES,
+          animType: AnimType.RIGHSLIDE,
+          title: 'Warbixin',
+          desc: state,
+          // btnCancelOnPress: () {},
+          btnOkOnPress: () {},
+        ).show();
+      }
     } else {
       // The request failed
       print('Error: ${response.statusCode}');
