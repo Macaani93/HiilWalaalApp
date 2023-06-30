@@ -32,9 +32,7 @@ class _SadaqahFormState extends State<SadaqahForm> {
         "apiUserId": "1000416",
         "apiKey": "API-675418888AHX",
         "paymentMethod": "mwallet_account",
-        "payerInfo": {
-          "accountNo": _phone.text,
-        },
+        "payerInfo": {"accountNo": _phone.text},
         "transactionInfo": {
           "referenceId": "12334",
           "invoiceId": "7896504",
@@ -72,13 +70,13 @@ class _SadaqahFormState extends State<SadaqahForm> {
       var state = responseMsg.substring(stateStartIndex, stateEndIndex);
 
       print(state);
-      ;
+
       if (state == 'declined') {
         AwesomeDialog(
           context: context,
           dialogType: DialogType.ERROR,
           animType: AnimType.RIGHSLIDE,
-          title: 'Donor Registeration',
+          title: 'Warbixin',
           desc: state,
           // btnCancelOnPress: () {},
           btnOkOnPress: () {},
@@ -88,7 +86,7 @@ class _SadaqahFormState extends State<SadaqahForm> {
           context: context,
           dialogType: DialogType.WARNING,
           animType: AnimType.RIGHSLIDE,
-          title: 'Donor Registeration',
+          title: 'Warbixin',
           desc: state,
           // btnCancelOnPress: () {},
           btnOkOnPress: () {},
@@ -114,7 +112,7 @@ class _SadaqahFormState extends State<SadaqahForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HIILLWALAL APPLICATION'),
+        title: Text('Hiil-Walal'),
         centerTitle: true,
       ),
       body: Padding(

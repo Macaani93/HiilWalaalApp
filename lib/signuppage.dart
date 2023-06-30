@@ -1,98 +1,210 @@
+import 'dart:convert';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:hilwalal_app/Api/Sessions.dart';
+import 'package:hilwalal_app/Api/api.dart';
+import 'package:http/http.dart' as http;
 
 import 'loginpage.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+  @override
+  _SignupPageState createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+  final fullNameController = TextEditingController();
+  final addressController = TextEditingController();
+  final phoneController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  Future<void> startSignUp() async {
+    String apiUrl = "http://" + apiLogin + "/flutterApi/SignUp.php";
+
+    try {
+      print('000000000000000000000000000');
+      var response = await http.post(Uri.parse(apiUrl), body: {
+        'username': usernameController.text,
+        'fullname': fullNameController.text,
+        'password': passwordController.text,
+        'address': addressController.text,
+        'phone': phoneController.text,
+      });
+      if (response.statusCode == 200) {
+        print('response');
+        var jsonData = json.decode(response.body);
+        print(jsonData);
+
+        if (jsonData["message"] == "Inserted Success") {
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.SUCCES,
+            animType: AnimType.RIGHSLIDE,
+            title: 'Warbixin',
+            desc: 'Inserted Success',
+            // btnCancelOnPress: () {},
+            btnOkOnPress: () {},
+          ).show();
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) => Dashboard()),
+          // );
+          // print('Inserted');
+          // clean();
+        } else if (jsonData["message"] == "User already exists") {
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.ERROR,
+            animType: AnimType.RIGHSLIDE,
+            title: 'Warbixin',
+            desc: 'User already exists',
+            // btnCancelOnPress: () {},
+            btnOkOnPress: () {},
+          ).show();
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) => Dashboard()),
+          // );
+          // print('Inserted');
+          // clean();
+        }
+      }
+      //   if (jsonData["error"]) {
+      //     // Handle error case
+      //     log("Login error");
+      //   } else {}
+      // } else {
+      //   print('Error');
+      //   log("HTTP request failed with status code: ${response.statusCode}");
+      // }
+    } catch (error) {
+      // log("Error: $error");
+    }
+  }
+
+  @override
+  void dispose() {
+    fullNameController.dispose();
+    addressController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HIILLWALAL APPLICATION'),
+        title: Text('Hiil-Walal'),
         centerTitle: true,
-        actions: [
-          // IconButton(
-          //   icon: Icon(Icons.settings),
-          //   onPressed: () {
-          //     // Do something when the button is pressed
-          //   },
-          // ),
-        ],
+        actions: [],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //  Icon(
-            //   Icons.signup_sharp,
-            //   size: 100.80,
-            //   color: Colors.green,
-            // ),
-            Text(
-              'Signup',
-              style: TextStyle(
-                fontSize: 30,
-                color: Color.fromARGB(255, 43, 3, 186),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 30),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'FullName',
-                // border: OutlineInputBorder(),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60.0),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Signup',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Color.fromARGB(255, 43, 3, 186),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 30),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Username',
-                // border: OutlineInputBorder(),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60.0),
+                SizedBox(height: 30),
+                TextField(
+                  controller: fullNameController,
+                  decoration: InputDecoration(
+                    hintText: 'FullName',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(60.0),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 15),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: 'Password',
-                // border: OutlineInputBorder(),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60.0),
+                SizedBox(height: 15),
+                TextField(
+                  controller: addressController,
+                  decoration: InputDecoration(
+                    hintText: 'Address',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(60.0),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 15),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                hintText: 'Confirm Password',
-                // border: OutlineInputBorder(),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60.0),
+                SizedBox(height: 15),
+                TextField(
+                  controller: phoneController,
+                  decoration: InputDecoration(
+                    hintText: 'Phone',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(60.0),
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(height: 30),
+                TextField(
+                  controller: usernameController,
+                  decoration: InputDecoration(
+                    hintText: 'Username',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(60.0),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(60.0),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15),
+                TextField(
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'Confirm Password',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(60.0),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () async {
+                    //print('999999999999');
+                    // Access the text values using the controllers
+                    startSignUp();
+                    // Do something with the text values
+                  },
+                  child: Text('Signup'),
+                ),
+                SizedBox(height: 15),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                  child: Text('Already have an account? Login'),
+                ),
+              ],
             ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Signup'),
-            ),
-            SizedBox(height: 15),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-              child: Text('Already have an account? Login'),
-            ),
-          ],
+          ),
         ),
       ),
     );

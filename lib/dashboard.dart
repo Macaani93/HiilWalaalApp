@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:hilwalal_app/Api/Sessions.dart';
 import 'package:hilwalal_app/ChariyahDash.dart';
 import 'package:hilwalal_app/blood.dart';
+import 'package:hilwalal_app/homepage.dart';
+import 'package:hilwalal_app/loginpage.dart';
+import 'package:hilwalal_app/main.dart';
+import 'package:hilwalal_app/profilepage.dart';
 
 import 'charity.dart';
 
@@ -12,7 +17,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _Dashboard extends State<Dashboard> {
-  Widget _currentPage = HomePage();
+  Widget _currentPage = MyHomePage();
 
   void _navigateToPage(Widget page) {
     setState(() {
@@ -30,9 +35,22 @@ class _Dashboard extends State<Dashboard> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('HIILLWALAL APPLICATION'),
+          title: Text('Hiil-Walal'),
           centerTitle: true,
-          actions: [],
+          // leading: ,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                  SetFullName('');
+                  SetAddress('');
+                  SetUser(0);
+                  setRole('');
+                  print(GetFullName());
+                },
+                icon: Icon(Icons.logout_sharp))
+          ],
         ),
         body: _currentPage,
         bottomNavigationBar: Visibility(
@@ -52,27 +70,14 @@ class _Dashboard extends State<Dashboard> {
                 _navigateToPage(blood());
               } else if (i == 2) {
                 _navigateToPage(ChariyahDash());
+              } else if (i == 4) {
+                _navigateToPage(ProfilePage());
+              } else if (i == 0) {
+                _navigateToPage(MyHomePage());
               }
             },
           ),
         ),
-      ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        child: Text('Go to Dashboard'),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DashboardPage()),
-          );
-        },
       ),
     );
   }

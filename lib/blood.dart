@@ -39,7 +39,7 @@ class blood extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'HIILWALAL',
+      title: 'Hiil-Walal',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
@@ -130,7 +130,7 @@ class blood extends StatelessWidget {
                                       textStyle: TextStyle(
                                           color: const Color.fromARGB(
                                               255, 255, 255, 255)),
-                                      backgroundColor: Colors.blue,
+                                      backgroundColor: Color(0xD621B3C7),
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(24.0),

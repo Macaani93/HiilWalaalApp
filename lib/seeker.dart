@@ -4,6 +4,7 @@ import 'package:hilwalal_app/Api/api.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // import 'loginpage.dart';
 
@@ -25,39 +26,18 @@ class seekerForm extends StatelessWidget {
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
-      //print(responseData);
-
       final List<Map<String, String>> data =
           List<Map<String, String>>.from(responseData.map((item) {
         return Map<String, String>.from(item);
       }));
-
-      print(data);
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => BloodDonorsPage(
-      //         data: List<Map<String, String>>.from(responseData)),
-      //   ),
-      //final responseData = json.decode(response.body);
-      // final List<Map<String, String>> data =
-      //     List<Map<String, String>>.from(responseData).map((item) {
-      //   return item.map((key, value) => MapEntry(key, value.toString()));
-      // }).toList();
-
-      // print(data);
-      // final List<Map<String, String>> data = [responseData];
-      // print(data);
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => BloodDonorsPage(
-      //       data: data,
-      //     ),
-      //   ),
-      // );
-      //print(responseData);
-      // Do something with responseData if needed
+      print('Data: $data');
+      // Navigate to the new page and pass the data as arguments
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BloodDonorsPage(data: data),
+        ),
+      );
     } else {
       throw Exception('Failed to send blood type');
     }
@@ -67,7 +47,7 @@ class seekerForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HIILLWALAL APPLICATION'),
+        title: Text('Hiil-Walal'),
         centerTitle: true,
         actions: [],
       ),
@@ -181,33 +161,105 @@ class seekerForm extends StatelessWidget {
 class BloodDonorsPage extends StatelessWidget {
   final List<Map<String, String>> data;
 
-  BloodDonorsPage({required this.data});
+  const BloodDonorsPage({required this.data});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 214, 213, 212),
       appBar: AppBar(
         title: Text('Blood Donors'),
       ),
-      body: ListView.builder(
-        itemCount: data.length,
-        itemBuilder: (context, index) {
-          final item = data[index];
-          return GestureDetector(
-            onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => BloodDonorDetailsPage(item)),
-              // );
-            },
-            child: ListTile(
-              title: Text(item['name']!),
-              subtitle: Text(item['Address']!),
-              trailing: Text(item['BloodType']!),
-            ),
-          );
-        },
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(3, 10, 3, 0),
+        child: ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (context, index) {
+            final item = data[index];
+            return Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item['name'] ?? '',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              child: Text(
+                                item['Phone'] ?? '',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '${item['Address']}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color.fromARGB(255, 38, 193, 182),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: IconButton(
+                              icon: Icon(Icons.phone),
+                              onPressed: () {
+                                final phoneUri =
+                                    Uri(scheme: 'tel', path: item['Phone']!);
+                                launchUrl(phoneUri);
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: IconButton(
+                              icon: Icon(Icons.message),
+                              onPressed: () {
+                                final phoneUri =
+                                    Uri(scheme: 'sms', path: item['Phone']!);
+                                launchUrl(phoneUri);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

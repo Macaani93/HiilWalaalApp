@@ -4,6 +4,7 @@ import 'dart:math';
 // import 'package:hilwalal_app/Api/api.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:hilwalal_app/Api/Sessions.dart';
+import 'package:hilwalal_app/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hilwalal_app/Api/api.dart';
@@ -19,9 +20,10 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HIILLWALAL APPLICATION'),
+        title: Text('Hiil-Walal '),
+        automaticallyImplyLeading: false,
         centerTitle: true,
-        actions: [],
+        //actions: [],
       ),
       body: Center(
         child: Column(
@@ -104,7 +106,12 @@ class LoginPage extends StatelessWidget {
                           context,
                           MaterialPageRoute(builder: (context) => Dashboard()),
                         );
-                       // print(jsonData['Role']);
+                        // print(jsonData['Role']);
+                        SetSumOFBloodDOnor(jsonData['SumBloodDonors']);
+                        // print(jsonData['SumBloodDonors']);
+                        SetFullName(jsonData['Role']['Name']);
+                        SetAddress(jsonData['Role']['Address']);
+                        SetPhone(jsonData['Role']['Phone']);
                         SetUser(jsonData['Role']['ID']);
                         setRole(jsonData['Role']['Role']);
                         //print(GetUser());
@@ -144,10 +151,10 @@ class LoginPage extends StatelessWidget {
             SizedBox(height: 15),
             TextButton(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => SignupPage()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignupPage()),
+                );
               },
               child: Text('SignUp'),
             ),

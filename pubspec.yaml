@@ -41,6 +41,7 @@ dependencies:
   flutter_session_manager: ^1.0.3
   modal_progress_hud_nsn: ^0.4.0
   awesome_dialog: ^2.2.1
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

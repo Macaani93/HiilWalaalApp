@@ -239,7 +239,7 @@ class DonorForm extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "HIILWALAL",
+          "Hiil-Walal",
           style: TextStyle(fontSize: 24.0),
         ),
         centerTitle: true,
