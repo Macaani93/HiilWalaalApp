@@ -1,21 +1,29 @@
 import 'dart:convert';
 import 'dart:math';
-// import 'package:dart_ipify/dart_ipify.dart';
-// import 'package:hilwalal_app/Api/api.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hilwalal_app/Api/Sessions.dart';
 import 'package:hilwalal_app/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hilwalal_app/Api/api.dart';
 import 'package:hilwalal_app/signuppage.dart';
-// import 'package:network_info_plus/network_info_plus.dart';
 import 'dashboard.dart';
 
-class LoginPage extends StatelessWidget {
-  // final info = NetworkInfo();
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   TextEditingController userName = TextEditingController();
   TextEditingController password = TextEditingController();
+  Color errorColor = Colors.red.shade100;
+  String errorMessage = '';
+  bool hasUserNameEntered = false;
+  bool hasPasswordEntered = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,142 +31,228 @@ class LoginPage extends StatelessWidget {
         title: Text('Hiil-Walal '),
         automaticallyImplyLeading: false,
         centerTitle: true,
-        //actions: [],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.person,
-              size: 100.80,
-              color: Colors.green,
-            ),
-            Text(
-              'Login',
-              style: TextStyle(
-                fontSize: 30,
-                color: Color.fromARGB(255, 3, 106, 189),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              controller: userName,
-              decoration: InputDecoration(
-                hintText: 'Username',
-
-                prefixIcon: Icon(Icons.person),
-                // border: OutlineInputBorder(),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60.0),
+      body: Container(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(30.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Icon(
+                //   Icons.person,
+                //   size: 100.80,
+                //   color: Colors.green,
+                // ),
+                SizedBox(
+                  height: 100,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-              width: 60,
-            ),
-            TextField(
-              obscureText: true,
-              controller: password,
-              decoration: InputDecoration(
-                hintText: 'Password',
-                prefixIcon: Icon(Icons.lock),
-                // border: OutlineInputBorder(),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(60.0),
+                Text(
+                  'LOGIN',
+                  style: TextStyle(
+                    fontSize: 35,
+                    color: Color.fromARGB(255, 3, 106, 189),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () {
-                Future<void> startLogin() async {
-                  String apiUrl =
-                      "http://" + apiLogin + "/flutterApi/Login.php";
+                Text(
+                  'Login with your Account',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 3, 106, 189),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                if (errorMessage != '')
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    margin: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: errorMessage.isNotEmpty
+                          ? errorColor
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: errorMessage.isNotEmpty
+                            ? Colors.red
+                            : Colors.transparent,
+                        width: 2,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          color: errorMessage.isNotEmpty
+                              ? Colors.red
+                              : Colors.transparent,
+                        ),
+                        SizedBox(width: 10),
+                        Flexible(
+                          child: Text(
+                            errorMessage,
+                            style: TextStyle(
+                              color: errorMessage.isNotEmpty
+                                  ? Colors.red
+                                  : Colors.transparent,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
-                  try {
-                    // setState(() {
-                    //   isLoading = true;
-                    // });
-
-                    var response = await http.post(Uri.parse(apiUrl), body: {
-                      'username': userName.text,
-                      'password': password.text,
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: userName,
+                  decoration: InputDecoration(
+                    hintText: 'Username',
+                    prefixIcon: Icon(Icons.person),
+                    suffixIcon: hasUserNameEntered
+                        ? FaIcon(
+                            FontAwesomeIcons.check,
+                            color: Colors.green,
+                            size: 24,
+                          )
+                        : FaIcon(
+                            FontAwesomeIcons.exclamationTriangle,
+                            color: Colors.red,
+                            size: 24,
+                          ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      hasUserNameEntered = value.isNotEmpty;
                     });
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                  width: 60,
+                ),
+                TextField(
+                  obscureText: true,
+                  controller: password,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    prefixIcon: Icon(Icons.lock),
+                    suffixIcon: hasPasswordEntered
+                        ? FaIcon(
+                            FontAwesomeIcons.check,
+                            color: Colors.green,
+                            size: 24,
+                          )
+                        : FaIcon(
+                            FontAwesomeIcons.exclamationTriangle,
+                            color: Colors.red,
+                            size: 24,
+                          ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      hasPasswordEntered = value.isNotEmpty;
+                    });
+                  },
+                ),
+                SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    Future<void> startLogin() async {
+                      String apiUrl =
+                          "http://" + apiLogin + "/flutterApi/Login.php";
 
-                    if (response.statusCode == 200) {
-                      var jsonData = json.decode(response.body);
-                      var sessionManager = SessionManager();
-                      sessionManager.set("data", jsonData);
-                      // await sessionManager.set("id", 3);
-                      // await sessionManager.set("measure", 23.2);
-                      // await sessionManager.set("isLoggedIn", true);
-                      // Provider.of<AppData>(context, listen: false).setRole(jsonData['Role']);
-                      //app.setRole(jsonData['Role']);
-                      if (jsonData["message"] == "Login successful") {
-                        // Store the role in the session variable
-                        //setRoleInSession(jsonData['Role']);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Dashboard()),
-                        );
-                        // print(jsonData['Role']);
-                        SetSumOFBloodDOnor(jsonData['SumBloodDonors']);
-                        // print(jsonData['SumBloodDonors']);
-                        SetFullName(jsonData['Role']['Name']);
-                        SetAddress(jsonData['Role']['Address']);
-                        SetPhone(jsonData['Role']['Phone']);
-                        SetUser(jsonData['Role']['ID']);
-                        setRole(jsonData['Role']['Role']);
-                        //print(GetUser());
-                        // clean();
-                      } else {
-                        Widget okButton = TextButton(
-                          child: Text("OK"),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        );
-                        AlertDialog alert = AlertDialog(
-                          title: Text("Username or password is incorrect"),
-                          actions: [okButton],
-                        );
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return alert;
-                          },
-                        );
+                      try {
+                        var response =
+                            await http.post(Uri.parse(apiUrl), body: {
+                          'username': userName.text,
+                          'password': password.text,
+                        });
+
+                        if (response.statusCode == 200) {
+                          var jsonData = json.decode(response.body);
+                          var sessionManager = SessionManager();
+                          sessionManager.set("data", jsonData);
+
+                          if (jsonData["message"] == "Login successful") {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Dashboard()),
+                            );
+                            SetSumOFBloodDOnor(jsonData['SumBloodDonors']);
+                            SetFullName(jsonData['Role']['Name']);
+                            SetAddress(jsonData['Role']['Address']);
+                            SetPhone(jsonData['Role']['Phone']);
+                            SetUser(jsonData['Role']['ID']);
+                            setRole(jsonData['Role']['Role']);
+                          } else {
+                            setState(() {
+                              errorMessage = jsonData["message"];
+                              hasUserNameEntered = false;
+                              hasPasswordEntered = false;
+                            });
+                          }
+                        } else {
+                          setState(() {
+                            errorMessage = "Error";
+
+                            //response.reasonPhrase;
+                          });
+                        }
+                      } catch (e) {
+                        setState(() {
+                          errorMessage = "Error: " + e.toString();
+                          hasUserNameEntered = false;
+                          hasPasswordEntered = false;
+                        });
                       }
                     }
-                  } catch (error) {
-                    //log("Error: $error");
-                  } finally {
-                    //setState(() {
-                    //isLoading = false;
-                    //ali });
-                  }
-                }
 
-                startLogin();
-              },
-              child: Text('Login'),
+                    if (userName.text.isEmpty || password.text.isEmpty) {
+                      setState(() {
+                        errorMessage =
+                            "Please enter your username and password";
+                        hasUserNameEntered = false;
+                        hasPasswordEntered = false;
+                      });
+                    } else {
+                      startLogin();
+                    }
+                  },
+                  child: Text(
+                    'Login',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(200, 50),
+                    primary: Colors.green,
+                  ),
+                ),
+                SizedBox(height: 10),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignupPage()),
+                    );
+                  },
+                  child: Text(
+                    "Don't have an account? Sign up",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 15),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignupPage()),
-                );
-              },
-              child: Text('SignUp'),
-            ),
-          ],
+          ),
         ),
       ),
     );
