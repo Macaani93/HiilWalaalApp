@@ -51,7 +51,7 @@ class Splash extends StatelessWidget {
           ),
         ],
       ),
-      splashIconSize: 500,
+      splashIconSize: 600,
       nextScreen: LoginPage(),
     );
   }
