@@ -21,10 +21,16 @@ class charity extends StatelessWidget {
             children: <Widget>[
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SadaqahForm()),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => SadaqahForm(
+                  //             name: donation.name,
+                  //             district: donation.District,
+                  //             amount: donation.amount,
+                  //             Type: donation.type,
+                  //           )),
+                  // );
                 },
                 child: Text(
                   'SADAQAH',

@@ -267,3 +267,136 @@ class blood extends StatelessWidget {
     );
   }
 }
+
+// import 'package:flutter/material.dart';
+
+// class RoundedCardsPage extends StatelessWidget {
+//   final String title = 'Rounded Cards';
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(title),
+//       ),
+//       body: Container(
+//         padding: EdgeInsets.all(16.0),
+//         child: Column(
+//           children: <Widget>[
+//             // First rounded card
+//             Card(
+//               elevation: 4.0,
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(8.0),
+//               ),
+//               child: Column(
+//                 children: <Widget>[
+//                   Container(
+//                     decoration: BoxDecoration(
+//                       borderRadius: BorderRadius.vertical(
+//                         top: Radius.circular(8.0),
+//                       ),
+//                       color: Colors.blue,
+//                     ),
+//                     child: ListTile(
+//                       title: Text(
+//                         'Card 1',
+//                         style: TextStyle(color: Colors.white),
+//                       ),
+//                     ),
+//                   ),
+//                   Padding(
+//                     padding: EdgeInsets.all(16.0),
+//                     child: Text('This is the content of Card 1'),
+//                   ),
+//                   ButtonBar(
+//                     children: <Widget>[
+//                       ElevatedButton(
+//                         onPressed: () {},
+//                         child: Text('Chat'),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             // Second rounded card
+//             Card(
+//               elevation: 4.0,
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(8.0),
+//               ),
+//               child: Column(
+//                 children: <Widget>[
+//                   Container(
+//                     decoration: BoxDecoration(
+//                       borderRadius: BorderRadius.vertical(
+//                         top: Radius.circular(8.0),
+//                       ),
+//                       color: Colors.green,
+//                     ),
+//                     child: ListTile(
+//                       title: Text(
+//                         'Card 2',
+//                         style: TextStyle(color: Colors.white),
+//                       ),
+//                     ),
+//                   ),
+//                   Padding(
+//                     padding: EdgeInsets.all(16.0),
+//                     child: Text('This is the content of Card 2'),
+//                   ),
+//                   ButtonBar(
+//                     children: <Widget>[
+//                       ElevatedButton(
+//                         onPressed: () {},
+//                         child: Text('Chat'),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             // Third rounded card
+//             Card(
+//               elevation: 4.0,
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(8.0),
+//               ),
+//               child: Column(
+//                 children: <Widget>[
+//                   Container(
+//                     decoration: BoxDecoration(
+//                       borderRadius: BorderRadius.vertical(
+//                         top: Radius.circular(8.0),
+//                       ),
+//                       color: Colors.orange,
+//                     ),
+//                     child: ListTile(
+//                       title: Text(
+//                         'Card 3',
+//                         style: TextStyle(color: Colors.white),
+//                       ),
+//                     ),
+//                   ),
+//                   Padding(
+//                     padding: EdgeInsets.all(16.0),
+//                     child: Text('This is the content of Card 3'),
+//                   ),
+//                   ButtonBar(
+//                     children: <Widget>[
+//                       ElevatedButton(
+//                         onPressed: () {},
+//                         child: Text('Chat'),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

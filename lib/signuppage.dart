@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hilwalal_app/Api/Sessions.dart';
 import 'package:hilwalal_app/Api/api.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +26,7 @@ class _SignupPageState extends State<SignupPage> {
     String apiUrl = "http://" + apiLogin + "/flutterApi/SignUp.php";
 
     try {
-      print('000000000000000000000000000');
+      //  print('000000000000000000000000000');
       var response = await http.post(Uri.parse(apiUrl), body: {
         'username': usernameController.text,
         'fullname': fullNameController.text,
@@ -107,13 +108,13 @@ class _SignupPageState extends State<SignupPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(15.0),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Signup',
+                  'SIGN-UP',
                   style: TextStyle(
                     fontSize: 30,
                     color: Color.fromARGB(255, 43, 3, 186),
@@ -124,10 +125,13 @@ class _SignupPageState extends State<SignupPage> {
                 TextField(
                   controller: fullNameController,
                   decoration: InputDecoration(
-                    hintText: 'FullName',
+                    hintText: 'Full Name',
+                    prefixIcon: Icon(Icons.person),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(60.0),
-                    ),
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none),
+                    filled: true,
+                    fillColor: Color(0xFFE5E5E5),
                   ),
                 ),
                 SizedBox(height: 15),
@@ -135,9 +139,13 @@ class _SignupPageState extends State<SignupPage> {
                   controller: addressController,
                   decoration: InputDecoration(
                     hintText: 'Address',
+                    prefixIcon: Icon(Icons.home),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(60.0),
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
                     ),
+                    filled: true,
+                    fillColor: Color(0xFFE5E5E5),
                   ),
                 ),
                 SizedBox(height: 15),
@@ -145,19 +153,33 @@ class _SignupPageState extends State<SignupPage> {
                   controller: phoneController,
                   decoration: InputDecoration(
                     hintText: 'Phone',
+                    prefixIcon: Icon(Icons.phone),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(60.0),
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
                     ),
+                    filled: true,
+                    fillColor: Color(0xFFE5E5E5),
                   ),
+                  keyboardType:
+                      TextInputType.number, // Only allows numeric input
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter
+                        .digitsOnly // Restrict input to digits only
+                  ],
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 15),
                 TextField(
                   controller: usernameController,
                   decoration: InputDecoration(
                     hintText: 'Username',
+                    prefixIcon: Icon(Icons.account_circle),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(60.0),
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
                     ),
+                    filled: true,
+                    fillColor: Color(0xFFE5E5E5),
                   ),
                 ),
                 SizedBox(height: 15),
@@ -166,9 +188,13 @@ class _SignupPageState extends State<SignupPage> {
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Password',
+                    prefixIcon: Icon(Icons.lock),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(60.0),
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
                     ),
+                    filled: true,
+                    fillColor: Color(0xFFE5E5E5),
                   ),
                 ),
                 SizedBox(height: 15),
@@ -177,9 +203,13 @@ class _SignupPageState extends State<SignupPage> {
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: 'Confirm Password',
+                    prefixIcon: Icon(Icons.lock),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(60.0),
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide.none,
                     ),
+                    filled: true,
+                    fillColor: Color(0xFFE5E5E5),
                   ),
                 ),
                 SizedBox(height: 30),

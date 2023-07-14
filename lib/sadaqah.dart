@@ -2,10 +2,39 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
+class Donation {
+  String name;
+  String district;
+  String type;
+  String description;
+  String amount;
+
+  Donation({
+    required this.name,
+    required this.district,
+    required this.type,
+    required this.description,
+    required this.amount,
+  });
+}
+
 class SadaqahForm extends StatefulWidget {
-  SadaqahForm({Key? key}) : super(key: key);
+  final String name;
+  final String district;
+  final String amount;
+  final String Type;
+  final String description;
+  SadaqahForm({
+    Key? key,
+    required this.name,
+    required this.district,
+    required this.amount,
+    required this.Type,
+    required this.description,
+  }) : super(key: key);
 
   @override
   _SadaqahFormState createState() => _SadaqahFormState();
@@ -110,48 +139,149 @@ class _SadaqahFormState extends State<SadaqahForm> {
 
   @override
   Widget build(BuildContext context) {
+    Donation donation = Donation(
+        name: widget.name,
+        district: widget.district,
+        type: widget.Type,
+        description: widget.description,
+        amount: widget.amount);
     return Scaffold(
       appBar: AppBar(
         title: Text('Hiil-Walal'),
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(5.0),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.attach_money,
-                size: 50.80,
-                color: Colors.green,
-              ),
-              Text(
-                'Sadaqah',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: Color.fromARGB(255, 43, 3, 186),
-                  fontWeight: FontWeight.bold,
+              // Icon(
+              //   Icons.attach_money,
+              //   size: 50.80,
+              //   color: Colors.green,
+              // ),
+              // Text(
+              //   'Sadaqah',
+              //   style: TextStyle(
+              //     fontSize: 30,
+              //     color: Color.fromARGB(255, 43, 3, 186),
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            height: 35,
+                            width: 400,
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 0, 11, 229),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Center(
+                              child: Text(
+                                donation.type,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            donation.name,
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                          Container(height: 10),
+                          Text(
+                            donation.district,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          Container(height: 10),
+                          Text(
+                            donation.description,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(height: 10),
+                  ],
                 ),
               ),
               SizedBox(height: 30),
-              TextField(
-                controller: _phone,
-                decoration: InputDecoration(
-                  hintText: 'Number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(60.0),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
-              TextField(
-                controller: _amount,
-                decoration: InputDecoration(
-                  hintText: 'Amount',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(60.0),
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _phone,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.money),
+                        hintText: 'Number',
+                        // border: OutlineInputBorder(
+                        //   borderRadius: BorderRadius.circular(60.0),
+                        // ),
+                      ),
+                      keyboardType:
+                          TextInputType.number, // Only allows numeric input
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter
+                            .digitsOnly // Restrict input to digits only
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    TextFormField(
+                      controller: _amount,
+                      decoration: InputDecoration(
+                        hintText: 'Amount',
+                        prefixIcon: Icon(Icons.attach_money),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the donation amount';
+                        }
+                        if (double.tryParse(value) == null) {
+                          return 'Please enter a valid amount';
+                        }
+                        double enteredAmount = double.parse(value);
+                        if (enteredAmount > double.parse(donation.amount)) {
+                          return 'The entered amount is greater than the donation amount';
+                        }
+                        return null;
+                      },
+                      keyboardType:
+                          TextInputType.number, // Only allows numeric input
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter
+                            .digitsOnly // Restrict input to digits only
+                      ],
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 30),
