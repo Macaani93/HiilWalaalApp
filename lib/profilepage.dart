@@ -174,6 +174,10 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        // backgroundColor: Colors.white,
+      ),
       body: Stack(
         alignment: Alignment.center,
         children: [
