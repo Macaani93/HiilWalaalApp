@@ -1,4 +1,10 @@
+import 'dart:convert';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:hilwalal_app/Api/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -10,6 +16,63 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _oldPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  String? Password;
+  String? UserID;
+
+  Future<void> _GetSessions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Password = prefs.getString('Password') ?? '';
+    UserID = prefs.getString('ID') ?? '';
+    //bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    setState(() {
+      this.Password = Password;
+      this.UserID = UserID;
+    });
+  }
+
+  void initState() {
+    _GetSessions();
+    super.initState();
+  }
+
+  void _Clear() {
+    _newPasswordController.clear();
+    _oldPasswordController.clear();
+    _confirmPasswordController.clear();
+  }
+
+  Future<void> ChangePassword() async {
+    String apiUrl = "http://" + apiLogin + "/flutterApi/ChangePassword.php";
+
+    try {
+      var response = await http.post(Uri.parse(apiUrl), body: {
+        'ID': UserID,
+        'OldPassword': _oldPasswordController.text,
+        'NewPassword': _newPasswordController.text,
+      });
+      if (response.statusCode == 200) {
+        print('response');
+        var jsonData = json.decode(response.body);
+        // print(jsonData);
+
+        if (jsonData["message"] == "Updated Success") {
+          _Clear();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Password changed successfully."),
+            ),
+          );
+          // Clear();
+        } else if (jsonData["message"] == "Password is Incorrect") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Password is Incorrect."),
+            ),
+          );
+        }
+      }
+    } catch (error) {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +97,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter your old password.";
+                  }
+                  if (value != Password) {
+                    return "Incorrect Password.";
                   }
                   return null;
                 },
@@ -75,11 +141,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     // Implement password change functionality here
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Password changed successfully."),
-                      ),
-                    );
+                    ChangePassword();
                   }
                 },
                 child: Text("Change Password"),

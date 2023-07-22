@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hilwalal_app/Api/Sessions.dart';
 
 import 'donor.dart';
@@ -64,202 +66,202 @@ class blood extends StatelessWidget {
         ),
       ),
       home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              //button,
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Card(
-                  // Set the shape of the card using a rounded rectangle border with a 8 pixel radius
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  // Set the clip behavior of the card
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  // Define the child widgets of the card
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // Display an image at the top of the card that fills the width of the card and has a height of 160 pixels
-                      Image.asset(
-                        ('Images/BLOOD.jpg'),
-                        height: 160,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                      // Add a container with padding that contains the card's title, text, and buttons
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            // Display the card's title using a font size of 24 and a dark grey color
-                            Text(
-                              "Blood Donation",
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.grey[800],
-                              ),
-                            ),
-                            // Add a space between the title and the text
-                            Container(height: 10),
-                            // Display the card's text using a font size of 15 and a light grey color
-                            Text(
-                              ('Your Blood can save A person`s Life'),
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[700],
-                              ),
-                            ),
-                            // Add a row with two buttons spaced apart and aligned to the right side of the card
-                            Row(
-                              children: <Widget>[
-                                // Add a spacer to push the buttons to the right side of the card
-                                const Spacer(),
-                                SizedBox(
-                                  height: 50,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: TextButton.icon(
-                                    style: TextButton.styleFrom(
-                                      textStyle: TextStyle(
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255)),
-                                      backgroundColor: Color(0xD621B3C7),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0),
-                                      ),
-                                    ),
-                                    onPressed: () => {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DonorForm()))
-                                    },
-                                    icon: Icon(
-                                      Icons.add_home,
-                                      color: Colors.white,
-                                    ),
-                                    label: Text(
-                                      'Register Now',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                // Add a text button labeled "SHARE" with transparent foreground color and an accent color for the text
-                              ],
-                            ),
-                          ],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                //button,
+                Container(
+                  child: Card(
+                    // Set the shape of the card using a rounded rectangle border with a 8 pixel radius
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    // Set the clip behavior of the card
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    // Define the child widgets of the card
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // Display an image at the top of the card that fills the width of the card and has a height of 160 pixels
+                        Image.asset(
+                          ('Images/bloodSeeker.jpg'),
+                          height: 225,
+                          width: double.infinity,
+                          fit: BoxFit.contain,
                         ),
-                      ),
-                      // Add a small space between the card and the next widget
-                      Container(height: 5),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Card(
-                  // Set the shape of the card using a rounded rectangle border with a 8 pixel radius
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  // Set the clip behavior of the card
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  // Define the child widgets of the card
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // Display an image at the top of the card that fills the width of the card and has a height of 160 pixels
-                      Image.asset(
-                        ('Images/blood-seeker.jpg'),
-                        height: 100,
-                        width: double.infinity,
-                        fit: BoxFit.contain,
-                      ),
-                      // Add a container with padding that contains the card's title, text, and buttons
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            // Display the card's title using a font size of 24 and a dark grey color
-                            Text(
-                              "Blood Receiver",
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.grey[800],
-                              ),
-                            ),
-                            // Add a space between the title and the text
-                            Container(height: 10),
-                            // Display the card's text using a font size of 15 and a light grey color
-                            Text(
-                              ('Your can Search A blood Type, To save A Life'),
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[700],
-                              ),
-                            ),
-                            // Add a row with two buttons spaced apart and aligned to the right side of the card
-                            Row(
-                              children: <Widget>[
-                                // Add a spacer to push the buttons to the right side of the card
-                                const Spacer(),
+                        // Add a container with padding that contains the card's title, text, and buttons
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // Display the card's title using a font size of 24 and a dark grey color
+                              Text("Blood Search",
+                                  style: GoogleFonts.aBeeZee(
+                                    fontSize: 24,
+                                    color: Colors.grey[800],
+                                  )),
+                              // Add a space between the title and the text
+                              Container(height: 5),
+                              // Display the card's text using a font size of 15 and a light grey color
+                              Text(
+                                  ('Your can Search A blood Type, To save A Life'),
+                                  style: GoogleFonts.aBeeZee(
+                                    fontSize: 15,
+                                    color: Colors.grey[700],
+                                  )),
+                              // Add a row with two buttons spaced apart and aligned to the right side of the card
+                              Row(
+                                children: <Widget>[
+                                  // Add a spacer to push the buttons to the right side of the card
+                                  const Spacer(),
 
-                                Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: TextButton.icon(
-                                    style: TextButton.styleFrom(
-                                      textStyle: TextStyle(
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255)),
-                                      backgroundColor: Colors.blue,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24.0),
+                                  Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: TextButton.icon(
+                                      style: TextButton.styleFrom(
+                                        textStyle: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255)),
+                                        backgroundColor: Colors.blue,
+                                        // shape: RoundedRectangleBorder(
+                                        //   borderRadius:
+                                        //       BorderRadius.circular(24.0),
+                                        // ),
+                                      ),
+                                      onPressed: () => {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    seekerForm()))
+                                      },
+                                      icon: Icon(
+                                        Icons.search,
+                                        color: Colors.white,
+                                      ),
+                                      label: Text(
+                                        'Search',
+                                        style: GoogleFonts.aBeeZee(
+                                            color: Colors.white),
                                       ),
                                     ),
-                                    onPressed: () => {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  seekerForm()))
-                                    },
-                                    icon: Icon(
-                                      Icons.search,
-                                      color: Colors.white,
-                                    ),
-                                    label: Text(
-                                      'Search',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
                                   ),
-                                ),
-                                // Add a text button labeled "SHARE" with transparent foreground color and an accent color for the text
-                              ],
-                            ),
-                          ],
+                                  // Add a text button labeled "SHARE" with transparent foreground color and an accent color for the text
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      // Add a small space between the card and the next widget
-                      Container(height: 5),
-                    ],
+                        // Add a small space between the card and the next widget
+                        // Container(height: 5),
+                      ],
+                    ),
                   ),
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 10,
+                ),
+
+                Container(
+                  child: Card(
+                    // Set the shape of the card using a rounded rectangle border with a 8 pixel radius
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    // Set the clip behavior of the card
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    // Define the child widgets of the card
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // Display an image at the top of the card that fills the width of the card and has a height of 160 pixels
+                        Image.asset(
+                          ('Images/BLOOD.jpg'),
+                          height: 160,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                        // Add a container with padding that contains the card's title, text, and buttons
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              // Display the card's title using a font size of 24 and a dark grey color
+                              Text("Blood Donation",
+                                  style: GoogleFonts.aBeeZee(
+                                    fontSize: 24,
+                                    color: Colors.grey[800],
+                                  )),
+                              // Add a space between the title and the text
+                              Container(height: 10),
+                              // Display the card's text using a font size of 15 and a light grey color
+                              Text(('Your Blood can save A person`s Life'),
+                                  style: GoogleFonts.aBeeZee(
+                                    fontSize: 15,
+                                    color: Colors.grey[700],
+                                  )),
+                              // Add a row with two buttons spaced apart and aligned to the right side of the card
+                              Row(
+                                children: <Widget>[
+                                  // Add a spacer to push the buttons to the right side of the card
+                                  const Spacer(),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: TextButton.icon(
+                                      style: TextButton.styleFrom(
+                                        textStyle: TextStyle(
+                                            color: const Color.fromARGB(
+                                                255, 255, 255, 255)),
+                                        backgroundColor: Color(0xD621B3C7),
+                                        // shape: RoundedRectangleBorder(
+                                        //   borderRadius:
+                                        //       BorderRadius.circular(24.0),
+                                        // ),
+                                      ),
+                                      onPressed: () => {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DonorForm()))
+                                      },
+                                      icon: Icon(
+                                        FontAwesomeIcons.userPlus,
+                                        size: 15,
+                                        color: Colors.white,
+                                      ),
+                                      label: Text(
+                                        'Register Now',
+                                        style: GoogleFonts.aBeeZee(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                  // Add a text button labeled "SHARE" with transparent foreground color and an accent color for the text
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Add a small space between the card and the next widget
+                        Container(height: 5),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
           ),
         ),
         backgroundColor: Color.fromARGB(26, 137, 134, 134),

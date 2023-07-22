@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hilwalal_app/Api/Sessions.dart';
 import 'package:hilwalal_app/Api/api.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,6 +12,8 @@ class SignupPage extends StatefulWidget {
   @override
   _SignupPageState createState() => _SignupPageState();
 }
+
+final _formKey = GlobalKey<FormState>();
 
 class _SignupPageState extends State<SignupPage> {
   final fullNameController = TextEditingController();
@@ -49,13 +50,7 @@ class _SignupPageState extends State<SignupPage> {
             // btnCancelOnPress: () {},
             btnOkOnPress: () {},
           ).show();
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => Dashboard()),
-          // );
-          // print('Inserted');
-          // clean();
+          Clear();
         } else if (jsonData["message"] == "User already exists") {
           AwesomeDialog(
             context: context,
@@ -66,26 +61,9 @@ class _SignupPageState extends State<SignupPage> {
             // btnCancelOnPress: () {},
             btnOkOnPress: () {},
           ).show();
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => Dashboard()),
-          // );
-          // print('Inserted');
-          // clean();
         }
       }
-      //   if (jsonData["error"]) {
-      //     // Handle error case
-      //     log("Login error");
-      //   } else {}
-      // } else {
-      //   print('Error');
-      //   log("HTTP request failed with status code: ${response.statusCode}");
-      // }
-    } catch (error) {
-      // log("Error: $error");
-    }
+    } catch (error) {}
   }
 
   @override
@@ -96,6 +74,15 @@ class _SignupPageState extends State<SignupPage> {
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  void Clear() {
+    fullNameController.clear();
+    addressController.clear();
+    phoneController.clear();
+    usernameController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
   }
 
   @override
@@ -109,130 +96,186 @@ class _SignupPageState extends State<SignupPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'SIGN-UP',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Color.fromARGB(255, 43, 3, 186),
-                    fontWeight: FontWeight.bold,
+          child: Form(
+            key: _formKey,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'SIGN-UP',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Color.fromARGB(255, 43, 3, 186),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 30),
-                TextField(
-                  controller: fullNameController,
-                  decoration: InputDecoration(
-                    hintText: 'Full Name',
-                    prefixIcon: Icon(Icons.person),
-                    border: OutlineInputBorder(
+                  SizedBox(height: 30),
+                  TextFormField(
+                    controller: fullNameController,
+                    decoration: InputDecoration(
+                      hintText: 'Full Name',
+                      prefixIcon: Icon(Icons.person),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none),
+                      filled: true,
+                      fillColor: Color(0xFFE5E5E5),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your full name';
+                      }
+                      return null; // Return null if the input is valid
+                    },
+                  ),
+                  SizedBox(height: 15),
+                  TextFormField(
+                    controller: addressController,
+                    decoration: InputDecoration(
+                      hintText: 'Address',
+                      prefixIcon: Icon(Icons.home),
+                      border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none),
-                    filled: true,
-                    fillColor: Color(0xFFE5E5E5),
-                  ),
-                ),
-                SizedBox(height: 15),
-                TextField(
-                  controller: addressController,
-                  decoration: InputDecoration(
-                    hintText: 'Address',
-                    prefixIcon: Icon(Icons.home),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFE5E5E5),
                     ),
-                    filled: true,
-                    fillColor: Color(0xFFE5E5E5),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Address';
+                      }
+                      return null; // Return null if the input is valid
+                    },
                   ),
-                ),
-                SizedBox(height: 15),
-                TextField(
-                  controller: phoneController,
-                  decoration: InputDecoration(
-                    hintText: 'Phone',
-                    prefixIcon: Icon(Icons.phone),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                  SizedBox(height: 15),
+                  TextFormField(
+                    controller: phoneController,
+                    decoration: InputDecoration(
+                      hintText: 'Phone',
+                      prefixIcon: Icon(Icons.phone),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFE5E5E5),
                     ),
-                    filled: true,
-                    fillColor: Color(0xFFE5E5E5),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Phone';
+                      }
+                      return null; // Return null if the input is valid
+                    },
+                    keyboardType:
+                        TextInputType.number, // Only allows numeric input
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter
+                          .digitsOnly // Restrict input to digits only
+                    ],
                   ),
-                  keyboardType:
-                      TextInputType.number, // Only allows numeric input
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter
-                        .digitsOnly // Restrict input to digits only
-                  ],
-                ),
-                SizedBox(height: 15),
-                TextField(
-                  controller: usernameController,
-                  decoration: InputDecoration(
-                    hintText: 'Username',
-                    prefixIcon: Icon(Icons.account_circle),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                  SizedBox(height: 15),
+                  TextFormField(
+                    controller: usernameController,
+                    decoration: InputDecoration(
+                      hintText: 'Username',
+                      prefixIcon: Icon(Icons.account_circle),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFE5E5E5),
                     ),
-                    filled: true,
-                    fillColor: Color(0xFFE5E5E5),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your UserName';
+                      }
+                      return null; // Return null if the input is valid
+                    },
                   ),
-                ),
-                SizedBox(height: 15),
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                  SizedBox(height: 15),
+                  TextFormField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      prefixIcon: Icon(Icons.lock),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFE5E5E5),
                     ),
-                    filled: true,
-                    fillColor: Color(0xFFE5E5E5),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Password';
+                      }
+                      return null; // Return null if the input is valid
+                    },
                   ),
-                ),
-                SizedBox(height: 15),
-                TextField(
-                  controller: confirmPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Confirm Password',
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
+                  SizedBox(height: 15),
+                  TextFormField(
+                    controller: confirmPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: 'Confirm Password',
+                      prefixIcon: Icon(Icons.lock),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Color(0xFFE5E5E5),
                     ),
-                    filled: true,
-                    fillColor: Color(0xFFE5E5E5),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your Confirm Password';
+                      }
+                      if (value != passwordController.text) {
+                        return "Passwords do not match.";
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () async {
-                    //print('999999999999');
-                    // Access the text values using the controllers
-                    startSignUp();
-                    // Do something with the text values
-                  },
-                  child: Text('Signup'),
-                ),
-                SizedBox(height: 15),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                  child: Text('Already have an account? Login'),
-                ),
-              ],
+                  SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        // Form is valid, now check if passwords match
+                        if (passwordController.text ==
+                            confirmPasswordController.text) {
+                          // Passwords match, proceed with signup
+                          startSignUp();
+                        } else {
+                          // Passwords do not match, show an error
+                          AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.ERROR,
+                            animType: AnimType.RIGHSLIDE,
+                            title: 'Error',
+                            desc: 'Password and Confirm Password do not match',
+                            btnOkOnPress: () {},
+                          ).show();
+                        }
+                      }
+                    },
+                    child: Text('Signup'),
+                  ),
+                  SizedBox(height: 15),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: Text('Already have an account? Login'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

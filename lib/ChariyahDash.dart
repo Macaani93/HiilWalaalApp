@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hilwalal_app/Api/api.dart';
 import 'package:hilwalal_app/sadaqah.dart';
 import 'package:http/http.dart' as http;
@@ -80,7 +81,12 @@ class _ChariyahDashState extends State<ChariyahDash> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text(
+          'Hiil-Walaal',
+          style: GoogleFonts.aBeeZee(fontSize: 25),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
         automaticallyImplyLeading: true,
       ),
       backgroundColor: Color.fromARGB(255, 227, 224, 224),
