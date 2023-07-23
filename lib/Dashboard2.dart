@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hilwalal_app/About.dart';
 import 'package:hilwalal_app/Api/Sessions.dart';
+import 'package:hilwalal_app/ApproveToDonated.dart';
 import 'package:hilwalal_app/ChariyahDash.dart';
 import 'package:hilwalal_app/ContactUs.dart';
 import 'package:hilwalal_app/blood.dart';
@@ -13,6 +14,7 @@ import 'package:hilwalal_app/donor.dart';
 import 'package:hilwalal_app/homepage.dart';
 import 'package:hilwalal_app/loginpage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hilwalal_app/notices.dart';
 import 'package:hilwalal_app/profilepage.dart';
 import 'package:hilwalal_app/seeker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -188,16 +190,16 @@ class _Dashboard extends State<Dashboard2> {
                 ),
                 TabItem(icon: Icons.bloodtype, title: 'Seeker'),
                 TabItem(icon: Icons.check_box_sharp, title: 'Donated'),
-                TabItem(icon: Icons.history, title: 'Profile'),
+                TabItem(icon: Icons.history, title: 'Notice'),
                 // TabItem(icon: Icons.person, title: 'Profile'),
               ],
               onTap: (int i) {
                 if (i == 1) {
                   _navigateToPage(seekerForm());
                 } else if (i == 2) {
-                  // _navigateToPage(Charity());
-                } else if (i == 4) {
-                  // _navigateToPage(ProfilePage());
+                  _navigateToPage(ApprovedDonatedUsersPage());
+                } else if (i == 3) {
+                  _navigateToPage(NoticesPage());
                 } else if (i == 0) {
                   _navigateToPage(MyHomePage2());
                 }
@@ -263,7 +265,6 @@ class _Dashboard extends State<Dashboard2> {
                                   ],
                                 ),
                               ),
-                           
                             ],
                           ),
                         ),
@@ -346,10 +347,10 @@ class _Dashboard extends State<Dashboard2> {
                       style: GoogleFonts.aBeeZee(),
                     ),
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     (MaterialPageRoute(
-                      //         builder: (context) => ProfilePage())));
+                      Navigator.push(
+                          context,
+                          (MaterialPageRoute(
+                              builder: (context) => NoticesPage())));
                       // Implement onTap functionality here
                     },
                   ),

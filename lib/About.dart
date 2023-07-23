@@ -67,7 +67,7 @@ class AboutTeamPage extends StatelessWidget {
                   _buildTeamMember(
                     name: "Zakariye dahir Farah",
                     jobTitle: "Member",
-                    imageUrl: "Images/zaki.png",
+                    imageUrl: "Images/zaki.jpg",
                   ),
                   _buildTeamMember(
                     name: "Shuceyb Ibrahim Ali",

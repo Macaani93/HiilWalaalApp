@@ -5,6 +5,7 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hilwalal_app/Api/Sessions.dart';
 import 'package:hilwalal_app/Dashboard2.dart';
+import 'package:hilwalal_app/ForgotPassword.dart';
 import 'package:hilwalal_app/homepage.dart';
 import 'package:hilwalal_app/sidebar.dart';
 import 'package:http/http.dart' as http;
@@ -265,7 +266,24 @@ class _LoginPageState extends State<LoginPage> {
                     primary: Colors.green,
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 1),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ForgetPasswordPage()),
+                    );
+                  },
+                  child: Text(
+                    "Forget Password",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+                // SizedBox(height: 2),
                 TextButton(
                   onPressed: () {
                     Navigator.push(

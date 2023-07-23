@@ -12,6 +12,7 @@ import 'package:hilwalal_app/changePassword.dart';
 import 'package:hilwalal_app/donor.dart';
 import 'package:hilwalal_app/homepage.dart';
 import 'package:hilwalal_app/loginpage.dart';
+import 'package:hilwalal_app/notices.dart';
 
 import 'package:hilwalal_app/profilepage.dart';
 import 'package:hilwalal_app/seeker.dart';
@@ -50,6 +51,7 @@ class _Dashboard extends State<Dashboard> {
     //bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     setState(() {
       this.FullName = FullName;
+      this.UserID = UserID;
     });
   }
 
@@ -133,6 +135,7 @@ class _Dashboard extends State<Dashboard> {
             centerTitle: true,
             actions: [
               PopupMenuButton(
+                icon: Icon(Icons.person),
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
@@ -209,7 +212,7 @@ class _Dashboard extends State<Dashboard> {
                 ),
                 TabItem(icon: Icons.bloodtype, title: 'Blood'),
                 TabItem(icon: Icons.attach_money, title: 'Charity'),
-                TabItem(icon: Icons.history, title: 'History'),
+                TabItem(icon: Icons.history, title: 'Notices'),
                 // TabItem(icon: Icons.person, title: 'Profile'),
               ],
               onTap: (int i) {
@@ -219,6 +222,8 @@ class _Dashboard extends State<Dashboard> {
                   _navigateToPage(Charity());
                 } else if (i == 4) {
                   _navigateToPage(ProfilePage());
+                } else if (i == 3) {
+                  _navigateToPage(NoticesPage());
                 } else if (i == 0) {
                   _navigateToPage(MyHomePage());
                 }
@@ -398,10 +403,10 @@ class _Dashboard extends State<Dashboard> {
                       style: GoogleFonts.aBeeZee(),
                     ),
                     onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     (MaterialPageRoute(
-                      //         builder: (context) => ProfilePage())));
+                      Navigator.push(
+                          context,
+                          (MaterialPageRoute(
+                              builder: (context) => NoticesPage())));
                       // Implement onTap functionality here
                     },
                   ),

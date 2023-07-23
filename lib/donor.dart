@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hilwalal_app/Api/Sessions.dart';
 import 'package:hilwalal_app/Api/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DonorForm extends StatefulWidget {
   const DonorForm({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ final _formKey = GlobalKey<FormState>();
 String _name = "";
 String _phone = "";
 String _birthDate = "";
-String _userID = GetUser();
+// String _userID = GetUser();
 String? _bloodType;
 TextEditingController _birthdate = TextEditingController();
 TextEditingController _nameController = TextEditingController();
@@ -35,6 +36,12 @@ String region = _region ?? '1';
 TextEditingController reg = TextEditingController();
 // reg.text=region;
 String? _district;
+String? FullName;
+String? UserID;
+String? Address;
+String? Phone;
+String? Role;
+String? SumOfBloodDonors;
 
 Future<void> _selectDate(BuildContext context) async {
   final DateTime? picked = await showDatePicker(
@@ -110,6 +117,32 @@ void _resetFormFields() {
 
 class _DonorFormState extends State<DonorForm> {
   // List<Map<String, dynamic>>? _districts;
+
+  String? FullName;
+  String? UserID;
+  String? Address;
+  String? Phone;
+  String? Role;
+  String? SumOfBloodDonors;
+
+  Future<void> _GetSessions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    FullName = prefs.getString('Name') ?? '';
+    Address = prefs.getString('Address') ?? '';
+    SumOfBloodDonors = prefs.getString('SumBloodDonors') ?? '';
+    Phone = prefs.getString('Phone') ?? '';
+    UserID = prefs.getString('ID') ?? '';
+    //bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    setState(() {
+      this.FullName = FullName;
+      this.UserID = UserID;
+    });
+  }
+
+  void initState() {
+    _GetSessions();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -451,11 +484,13 @@ class _DonorFormState extends State<DonorForm> {
         'District': _district,
         'Age': _birthdate.text,
         'BloodType': _bloodType,
-        'UserID': _userID,
+        'UserID': UserID,
       });
 
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
+        print(jsonData);
+        // print(object)
         if (jsonData["message"] == "Inserted Success") {
           AwesomeDialog(
             context: context,
