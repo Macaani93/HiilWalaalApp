@@ -80,7 +80,7 @@ class _SadaqahFormState extends State<SadaqahForm> {
         'UserID': UserID ?? '',
         'Amount': _amount.text,
         'CharityID': CharityID,
-        'Phone': _amount.text
+        'Phone': _phone.text
       });
       if (response.statusCode == 200) {
         print('response');
