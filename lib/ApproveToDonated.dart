@@ -89,24 +89,31 @@ class _ApprovedDonatedUsersPageState extends State<ApprovedDonatedUsersPage> {
   }
 
   Widget _buildListTile(dynamic user) {
-    return Card(
-      child: ListTile(
-        title: Text('Name: ${user['name']}'),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Address: ${user['Address']}'),
-            Text('Phone: ${user['Phone']}'),
-            Text('Blood Type: ${user['BloodType']}'),
-          ],
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(5, 2, 5, 3),
+          child: Card(
+            child: ListTile(
+              title: Text('Name: ${user['name']}'),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Address: ${user['Address']}'),
+                  Text('Phone: ${user['Phone']}'),
+                  Text('Blood Type: ${user['BloodType']}'),
+                ],
+              ),
+              trailing: ElevatedButton(
+                onPressed: () {
+                  _showConfirmationDialog(user);
+                },
+                child: Text('Approve Donated'),
+              ),
+            ),
+          ),
         ),
-        trailing: ElevatedButton(
-          onPressed: () {
-            _showConfirmationDialog(user);
-          },
-          child: Text('Approve Donated'),
-        ),
-      ),
+      ],
     );
   }
 
@@ -153,6 +160,7 @@ class _ApprovedDonatedUsersPageState extends State<ApprovedDonatedUsersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 246, 246, 246),
       appBar: AppBar(
         title: Text('Approved Donated Users'),
       ),

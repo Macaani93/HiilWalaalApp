@@ -17,6 +17,10 @@ class _CharityState extends State<Charity> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Charities'),
+        automaticallyImplyLeading: true,
+      ),
       backgroundColor: Color.fromARGB(26, 187, 187, 187),
       body: Stack(
         children: [

@@ -47,7 +47,6 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               content: Text("Password changed successfully."),
             ),
           );
-          // Clear();
         } else if (jsonData["message"] == "Password is Incorrect") {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

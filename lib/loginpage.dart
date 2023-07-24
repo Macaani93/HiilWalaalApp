@@ -203,6 +203,16 @@ class _LoginPageState extends State<LoginPage> {
                             await prefs.setString('ID', jsonData['Role']['ID']);
                             await prefs.setString(
                                 'Role', jsonData['Role']['Role']);
+                            await prefs.setString(
+                                'SumCharity', jsonData['SumCharity']);
+                            await prefs.setString(
+                                'SumBloodDonated', jsonData['SumBloodDonated']);
+                            await prefs.setString('SumBloodDonorNotApproved',
+                                jsonData['SumBloodDonorNotApproved']);
+                            await prefs.setString(
+                                'Notices', jsonData['Notices']);
+                            await prefs.setString(
+                                'HospitalUsers', jsonData['HospitalUsers']);
                             if (jsonData['Role']['Role'] == 'Hospital') {
                               Navigator.push(
                                 context,

@@ -40,18 +40,25 @@ class _Dashboard extends State<Dashboard> {
   String? Phone;
   String? Role;
   String? SumOfBloodDonors;
+  String? SumOfBloodDonorPending;
+  String? SumOfCharity;
 
   Future<void> _GetSessions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     FullName = prefs.getString('Name') ?? '';
     Address = prefs.getString('Address') ?? '';
     SumOfBloodDonors = prefs.getString('SumBloodDonors') ?? '';
+    SumOfBloodDonorPending = prefs.getString('SumBloodDonorNotApproved') ?? '';
+    SumOfCharity = prefs.getString('SumCharity') ?? '';
     Phone = prefs.getString('Phone') ?? '';
     UserID = prefs.getString('ID') ?? '';
     //bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     setState(() {
       this.FullName = FullName;
       this.UserID = UserID;
+      this.SumOfBloodDonorPending = SumOfBloodDonorPending;
+      this.SumOfCharity = SumOfCharity;
+      this.SumOfBloodDonors = SumOfBloodDonors;
     });
   }
 
