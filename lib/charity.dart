@@ -84,7 +84,9 @@ class _CharityState extends State<Charity> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ChariyahDash()));
+                                      builder: (context) => ChariyahDash(
+                                            Type: ' Masjid',
+                                          )));
                             },
                           ),
                         if (searchText.isEmpty ||
@@ -97,7 +99,14 @@ class _CharityState extends State<Charity> {
                               svgSrc: "Images/wado.jpg",
                               // press: () {},
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChariyahDash(
+                                            Type: ' Wado',
+                                          )));
+                            },
                           ),
                         if (searchText.isEmpty ||
                             "CEELASHA"
@@ -109,7 +118,14 @@ class _CharityState extends State<Charity> {
                               svgSrc: "Images/masjid.jpg",
                               // press: () {},
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChariyahDash(
+                                            Type: ' Ceel',
+                                          )));
+                            },
                           ),
                         if (searchText.isEmpty ||
                             "DUGSIYADA"
@@ -121,7 +137,14 @@ class _CharityState extends State<Charity> {
                               svgSrc: "Images/dugsi.jpg",
                               // press: () {},
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChariyahDash(
+                                            Type: ' Dugsi',
+                                          )));
+                            },
                           ),
                       ],
                     ),

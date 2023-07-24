@@ -1,6 +1,7 @@
 import 'dart:convert';
 // import 'dart:js';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hilwalal_app/Api/api.dart';
 import 'package:hilwalal_app/notices.dart';
@@ -12,10 +13,20 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // import 'loginpage.dart';
+class seekerForm extends StatefulWidget {
+  const seekerForm({super.key});
 
-class seekerForm extends StatelessWidget {
+  @override
+  State<seekerForm> createState() => _seekerFormState();
+}
+
+class _seekerFormState extends State<seekerForm> {
   final _formKey = GlobalKey<FormState>();
+  String? _region;
 
+  TextEditingController reg = TextEditingController();
+// reg.text=region;
+  String? _district;
   String _regDate = "";
   String? _bloodType;
   Future<void> _sendBloodType(BuildContext context) async {
@@ -26,7 +37,10 @@ class seekerForm extends StatelessWidget {
     final url = Uri.parse('http://' + apiLogin + '/flutterApi/bloodseeker.php');
     final response = await http.post(
       url,
-      body: {'blood_type': _bloodType!},
+      body: {
+        'blood_type': _bloodType!,
+        'district': _district!,
+      },
     );
 
     if (response.statusCode == 200) {
@@ -36,15 +50,70 @@ class seekerForm extends StatelessWidget {
         return Map<String, String>.from(item);
       }));
       print('Data: $data');
+      // ignore: unnecessary_null_comparison
+      if (data == null || data.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.orange,
+            content: Text(
+                "Sorry, there are currently no donors available. Please try again later or contact us for more information."),
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BloodDonorsPage(data: data),
+          ),
+        );
+      }
       // Navigate to the new page and pass the data as arguments
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BloodDonorsPage(data: data),
-        ),
-      );
     } else {
       throw Exception('Failed to send blood type');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchRegions() async {
+    final response = await http.get(
+      Uri.parse('http://' + apiLogin + '/flutterApi/GetRegions.php'),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      List<Map<String, dynamic>> regions = List<Map<String, dynamic>>.from(
+          jsonData.map((region) => region as Map<String, dynamic>));
+      return regions;
+    } else {
+      throw Exception('Failed to load regions');
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>> _fetchDistrictsByRegionId(
+      String? regionId) {
+    if (regionId == null) {
+      return Stream.value([]);
+    } else {
+      return Stream.fromFuture(
+        http.post(
+          Uri.parse('http://' + apiLogin + '/flutterApi/GetDistricts.php'),
+          body: {'region_id': regionId},
+        ).then((response) {
+          if (response.statusCode == 200) {
+            final jsonData = json.decode(response.body);
+            if (jsonData is List) {
+              return List<Map<String, dynamic>>.from(
+                jsonData
+                    .map((district) => district as Map<String, dynamic>)
+                    .toList(),
+              );
+            } else {
+              throw Exception('Invalid response format');
+            }
+          } else {
+            throw Exception('Failed to load districts');
+          }
+        }),
+      );
     }
   }
 
@@ -103,6 +172,7 @@ class seekerForm extends StatelessWidget {
                 children: [
                   DropdownButtonFormField<String>(
                     decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.bloodtype),
                       labelText: "Blood Type",
                       border: OutlineInputBorder(),
                     ),
@@ -143,6 +213,108 @@ class seekerForm extends StatelessWidget {
                     value: _bloodType, // Set the current selected value
                     onChanged: (value) {
                       _bloodType = value;
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  FutureBuilder<List<Map<String, dynamic>>>(
+                    future: _fetchRegions(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return DropdownButtonFormField<String>(
+                          items: [
+                            DropdownMenuItem(
+                              value: '0',
+                              child: Text("Loading..."),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _region = value;
+                            });
+                          },
+                        );
+                      }
+
+                      final regions = snapshot.data!;
+                      return DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(FontAwesomeIcons.treeCity),
+                          labelText: "Region",
+                          border: OutlineInputBorder(),
+                        ),
+                        items: regions.map<DropdownMenuItem<String>>((region) {
+                          return DropdownMenuItem<String>(
+                            value: region["id"],
+                            child: Text(region["name"]),
+                          );
+                        }).toList(),
+                        value: _region,
+                        onChanged: (value) {
+                          setState(() {
+                            _region = value;
+                            _district =
+                                null; // Reset districts when region changes
+                            _fetchDistrictsByRegionId(_region!);
+                          });
+                        },
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  StreamBuilder<List<Map<String, dynamic>>>(
+                    stream: _region == null
+                        ? Stream.value([])
+                        : _fetchDistrictsByRegionId(_region!),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final districtData = snapshot.data!;
+                        final List<DropdownMenuItem<String>> dropdownItems =
+                            districtData
+                                .map<DropdownMenuItem<String>>(
+                                  (district) => DropdownMenuItem<String>(
+                                    value: district["id"].toString(),
+                                    child: Text(district["name"]),
+                                  ),
+                                )
+                                .toList();
+
+                        return DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.location_city),
+                            labelText: "District",
+                            border: OutlineInputBorder(),
+                          ),
+                          items: dropdownItems,
+                          value: _district,
+                          onChanged: (value) {
+                            setState(() {
+                              _district = value;
+                            });
+                          },
+                        );
+                      } else if (!snapshot.hasData) {
+                        return DropdownButtonFormField<String>(
+                          items: [
+                            DropdownMenuItem(
+                              value: '0',
+                              child: Text("Loading..."),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _district = value;
+                            });
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("Error: ${snapshot.error}");
+                      } else {
+                        return CircularProgressIndicator();
+                      }
                     },
                   ),
                   SizedBox(height: 25),

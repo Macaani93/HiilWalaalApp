@@ -25,6 +25,11 @@ class _ContactUsPageState extends State<ContactUsPage> {
         _isLoadingAvatar = false;
         _isLoadingSocialIcons = false;
       });
+    });Future.delayed(Duration(seconds: 2), () {
+      setState(() {
+        _isLoadingAvatar = false;
+        _isLoadingSocialIcons = false;
+      });
     });
   }
 

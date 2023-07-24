@@ -364,10 +364,8 @@ class _Dashboard extends State<Dashboard> {
                       style: GoogleFonts.aBeeZee(),
                     ),
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          (MaterialPageRoute(
-                              builder: (context) => ChariyahDash())));
+                      Navigator.push(context,
+                          (MaterialPageRoute(builder: (context) => Charity())));
                       // Implement onTap functionality here
                     },
                   ),
