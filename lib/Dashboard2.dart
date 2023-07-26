@@ -19,7 +19,6 @@ import 'package:hilwalal_app/profilepage.dart';
 import 'package:hilwalal_app/seeker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-
 import 'charity.dart';
 
 class Dashboard2 extends StatefulWidget {
@@ -209,15 +208,9 @@ class _Dashboard extends State<Dashboard2> {
           ),
           drawer: Drawer(
             child: Container(
-              decoration: BoxDecoration(
-                  // image: DecorationImage(
-                  //   image: AssetImage('Images/logo-Black.pngs'),
-                  //   fit: BoxFit.cover,
-                  // ),
-                  ),
+              decoration: BoxDecoration(),
               child: Column(
                 children: [
-                  // MyCard(),
                   DrawerHeader(
                     margin: EdgeInsets.zero,
                     padding: EdgeInsets.zero,
@@ -272,13 +265,9 @@ class _Dashboard extends State<Dashboard2> {
                       ],
                     ),
                   ),
-
                   SizedBox(
                     height: 10,
                   ),
-                  // Divider(
-                  //   thickness: 1,
-                  // ),
                   Container(
                     width: double
                         .infinity, // Set the container width to match parent
@@ -297,7 +286,6 @@ class _Dashboard extends State<Dashboard2> {
                   Divider(
                     thickness: 1,
                   ),
-
                   ListTile(
                     leading: Icon(
                       Icons.local_hospital_sharp,
@@ -315,11 +303,6 @@ class _Dashboard extends State<Dashboard2> {
                       // Implement onTap functionality here
                     },
                   ),
-
-                  // Divider(
-                  //   thickness: 1,
-                  //   //color: Colors.black,
-                  // ),
                   Container(
                     width: double
                         .infinity, // Set the container width to match parent
@@ -846,53 +829,6 @@ class _MyHomePageState2 extends State<MyHomePage2> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class MyCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            height: 120,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8.0),
-                topRight: Radius.circular(8.0),
-              ),
-              image: DecorationImage(
-                image:
-                    AssetImage('Images/profile.png'), // Replace with your image
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Name',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
