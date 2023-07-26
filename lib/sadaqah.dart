@@ -254,6 +254,8 @@ class _SadaqahFormState extends State<SadaqahForm> {
           return 'RCS_NO_ROUTE_FOUND';
         } else if (responseMsg.contains('Haraaga xisaabtaadu kuguma filna')) {
           return 'Haraaga xisaabtaadu kuguma filna';
+        } else if (responseMsg.contains('RCS_TRAN_FAILED_AT_ISSUER_SYSTEM')) {
+          return 'RCS_TRAN_FAILED_AT_ISSUER_SYSTEM';
         } else {
           // Add more conditions to check for other response types if needed.
           return 'Other response type';
@@ -331,6 +333,17 @@ class _SadaqahFormState extends State<SadaqahForm> {
           animType: AnimType.RIGHSLIDE,
           title: 'Warbixin',
           desc: 'Haraaga xisaabtaadu kuguma filna, ' + _phone.text,
+          // btnCancelOnPress: () {},
+          btnOkOnPress: () {},
+        ).show();
+      } else if (getResponseMessage(responseMsg) ==
+          'RCS_TRAN_FAILED_AT_ISSUER_SYSTEM') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.WARNING,
+          animType: AnimType.RIGHSLIDE,
+          title: 'Warbixin',
+          desc: 'Fadlan markale ku celi!',
           // btnCancelOnPress: () {},
           btnOkOnPress: () {},
         ).show();
