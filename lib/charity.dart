@@ -43,7 +43,6 @@ class _CharityState extends State<Charity> {
                       alignment: Alignment.center,
                       height: 52,
                       width: 52,
-                      
                     ),
                   ),
                   Text(
@@ -85,7 +84,7 @@ class _CharityState extends State<Charity> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ChariyahDash(
-                                            Type: ' Masjid',
+                                            Type: 'Masjid',
                                           )));
                             },
                           ),
@@ -104,7 +103,7 @@ class _CharityState extends State<Charity> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ChariyahDash(
-                                            Type: ' Wado',
+                                            Type: 'Wado',
                                           )));
                             },
                           ),
@@ -123,7 +122,7 @@ class _CharityState extends State<Charity> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ChariyahDash(
-                                            Type: ' Ceel',
+                                            Type: 'Ceel',
                                           )));
                             },
                           ),
@@ -142,7 +141,7 @@ class _CharityState extends State<Charity> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ChariyahDash(
-                                            Type: ' Dugsi',
+                                            Type: 'Dugsi',
                                           )));
                             },
                           ),

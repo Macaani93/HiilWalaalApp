@@ -256,6 +256,8 @@ class _SadaqahFormState extends State<SadaqahForm> {
           return 'Haraaga xisaabtaadu kuguma filna';
         } else if (responseMsg.contains('RCS_TRAN_FAILED_AT_ISSUER_SYSTEM')) {
           return 'RCS_TRAN_FAILED_AT_ISSUER_SYSTEM';
+        } else if (responseMsg.contains('RCS_USER_REJECTED')) {
+          return 'RCS_USER_REJECTED';
         } else {
           // Add more conditions to check for other response types if needed.
           return 'Other response type';
@@ -263,6 +265,17 @@ class _SadaqahFormState extends State<SadaqahForm> {
       }
 
       if (getResponseMessage(responseMsg) == 'User Rejected') {
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.ERROR,
+          animType: AnimType.RIGHSLIDE,
+          title: 'Warbixin',
+          desc: 'Waa Laga laabtay!.',
+          // btnCancelOnPress: () {},
+          btnOkOnPress: () {},
+        ).show();
+      }
+      if (getResponseMessage(responseMsg) == 'RCS_USER_REJECTED') {
         AwesomeDialog(
           context: context,
           dialogType: DialogType.ERROR,
