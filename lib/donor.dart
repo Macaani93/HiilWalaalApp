@@ -1,14 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hilwalal_app/Api/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:hilwalal_app/Api/Sessions.dart';
-import 'package:hilwalal_app/Api/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DonorForm extends StatefulWidget {
@@ -42,13 +41,13 @@ String? Address;
 String? Phone;
 String? Role;
 String? SumOfBloodDonors;
-
+bool isLoading = false;
 Future<void> _selectDate(BuildContext context) async {
   final DateTime? picked = await showDatePicker(
     context: context,
-    initialDate: DateTime.now(),
+    initialDate: DateTime(2005),
     firstDate: DateTime(1950),
-    lastDate: DateTime.now(),
+    lastDate: DateTime(2005),
   );
   if (picked != null) {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -59,7 +58,8 @@ Future<void> _selectDate(BuildContext context) async {
 
 Future<List<Map<String, dynamic>>> _fetchRegions() async {
   final response = await http.get(
-    Uri.parse('http://' + apiLogin + '/flutterApi/GetRegions.php'),
+    // Uri.parse('http://' + apiLogin + '/flutterApi/GetRegions.php'),
+    Uri.parse(apiDomain + 'GetRegions.php'),
   );
 
   if (response.statusCode == 200) {
@@ -78,7 +78,8 @@ Stream<List<Map<String, dynamic>>> _fetchDistrictsByRegionId(String? regionId) {
   } else {
     return Stream.fromFuture(
       http.post(
-        Uri.parse('http://' + apiLogin + '/flutterApi/GetDistricts.php'),
+        // Uri.parse('http://' + apiLogin + '/flutterApi/GetDistricts.php'),
+        Uri.parse(apiDomain + 'GetDistricts.php'),
         body: {'region_id': regionId},
       ).then((response) {
         if (response.statusCode == 200) {
@@ -101,18 +102,12 @@ Stream<List<Map<String, dynamic>>> _fetchDistrictsByRegionId(String? regionId) {
 }
 
 void _resetFormFields() {
-  // print(_birthdate.text);
   _nameController.clear();
   _phoneController.clear();
-  _name = "";
-  _phone = "";
-  // _address = "";
-  _birthDate = "";
   _birthdate.clear(); // For the birth date text field
   _region = null;
-  region = '';
+  _district = null;
   _bloodType = null;
-  // _bloodType = '';
 }
 
 class _DonorFormState extends State<DonorForm> {
@@ -455,13 +450,22 @@ class _DonorFormState extends State<DonorForm> {
                           // _resetFormFields();
                           // Handle button press
                         },
-                        child: Text(
-                          "Save",
-                          style: TextStyle(
-                            fontSize: 23,
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: isLoading
+                            ? SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
+                              )
+                            : Text(
+                                "Save",
+                                style: TextStyle(
+                                  fontSize: 23,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -475,7 +479,12 @@ class _DonorFormState extends State<DonorForm> {
   }
 
   Future<void> insertDonor() async {
-    String apiUrl = "http://" + apiLogin + "/flutterApi/blood_donation.php";
+    setState(() {
+      isLoading = true; // Set loading state to true
+    });
+
+    // String apiUrl = "http://" + apiLogin + "/flutterApi/blood_donation.php";
+    String apiUrl = apiDomain + "blood_donation.php";
     try {
       var response = await http.post(Uri.parse(apiUrl), body: {
         'name': _name,
@@ -515,6 +524,10 @@ class _DonorFormState extends State<DonorForm> {
       }
     } catch (error) {
       print('Error: $error');
+    } finally {
+      setState(() {
+        isLoading = false; // Set loading state to false
+      });
     }
   }
 }

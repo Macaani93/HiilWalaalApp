@@ -34,7 +34,8 @@ class _seekerFormState extends State<seekerForm> {
       return;
     }
 
-    final url = Uri.parse('http://' + apiLogin + '/flutterApi/bloodseeker.php');
+    // final url = Uri.parse('http://' + apiLogin + '/flutterApi/bloodseeker.php');
+    final url = Uri.parse(apiDomain + 'bloodseeker.php');
     final response = await http.post(
       url,
       body: {
@@ -75,7 +76,8 @@ class _seekerFormState extends State<seekerForm> {
 
   Future<List<Map<String, dynamic>>> _fetchRegions() async {
     final response = await http.get(
-      Uri.parse('http://' + apiLogin + '/flutterApi/GetRegions.php'),
+      // Uri.parse('http://' + apiLogin + '/flutterApi/GetRegions.php'),
+      Uri.parse(apiDomain + 'GetRegions.php'),
     );
 
     if (response.statusCode == 200) {
@@ -95,7 +97,8 @@ class _seekerFormState extends State<seekerForm> {
     } else {
       return Stream.fromFuture(
         http.post(
-          Uri.parse('http://' + apiLogin + '/flutterApi/GetDistricts.php'),
+          // Uri.parse('http://' + apiLogin + '/flutterApi/GetDistricts.php'),
+          Uri.parse(apiDomain + 'GetDistricts.php'),
           body: {'region_id': regionId},
         ).then((response) {
           if (response.statusCode == 200) {
@@ -376,8 +379,8 @@ class _BloodDonorsPageState extends State<BloodDonorsPage> {
 
   Future<void> sendSMS(String phoneNumber, String message) async {
     // Replace these values with your API credentials and URL
-    final String user = 'TabaarakTest';
-    final String password = 'TabaarakTest@@';
+    final String user = 'Hii';
+    final String password = 'Walaal@23!';
     final String apiUrl = 'https://tabaarakict.so/SendSMS.aspx';
 
     // Encode the message to URL format

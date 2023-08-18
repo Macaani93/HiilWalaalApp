@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hilwalal_app/Api/api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -18,7 +17,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _confirmPasswordController = TextEditingController();
   String? Password;
   String? UserID;
-
+  bool isLoading = false;
   Future<void> _GetSessions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Password = prefs.getString('Password') ?? '';
@@ -42,7 +41,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 
   Future<void> ChangePassword() async {
-    String apiUrl = "http://" + apiLogin + "/flutterApi/ChangePassword.php";
+    setState(() {
+      isLoading = true; // Set loading state to true
+    });
+    // String apiUrl = "http://" + apiLogin + "/flutterApi/ChangePassword.php";
+    String apiUrl = apiDomain + "ChangePassword.php";
 
     try {
       var response = await http.post(Uri.parse(apiUrl), body: {
@@ -56,12 +59,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         // print(jsonData);
 
         if (jsonData["message"] == "Updated Success") {
-          _Clear();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Password changed successfully."),
             ),
           );
+          String now = _confirmPasswordController.text;
+          _Clear();
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          Password = prefs.setString('Password', now) as String?;
+
           // Clear();
         } else if (jsonData["message"] == "Password is Incorrect") {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -71,7 +78,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           );
         }
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setState(() {
+        isLoading = false; // Set loading state to false
+      });
+    }
   }
 
   @override
@@ -115,6 +127,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   if (value == null || value.isEmpty) {
                     return "Please enter your new password.";
                   }
+                  if (value == Password) {
+                    return "Old password and Current is same!!.";
+                  }
                   return null;
                 },
               ),
@@ -144,7 +159,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     ChangePassword();
                   }
                 },
-                child: Text("Change Password"),
+                child: isLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : Text("Change Password"),
               ),
             ],
           ),

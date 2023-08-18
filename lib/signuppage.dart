@@ -22,9 +22,14 @@ class _SignupPageState extends State<SignupPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
+  bool isLoading = false;
   Future<void> startSignUp() async {
-    String apiUrl = "http://" + apiLogin + "/flutterApi/SignUp.php";
+    setState(() {
+      isLoading = true; // Set loading state to true
+    });
+
+    // String apiUrl = "http://" + apiLogin + "/flutterApi/SignUp.php";
+    String apiUrl = apiDomain + "SignUp.php";
 
     try {
       //  print('000000000000000000000000000');
@@ -36,9 +41,9 @@ class _SignupPageState extends State<SignupPage> {
         'phone': phoneController.text,
       });
       if (response.statusCode == 200) {
-        print('response');
         var jsonData = json.decode(response.body);
-        print(jsonData);
+        // print(jsonData["message"]);
+        // print(jsonData);
 
         if (jsonData["message"] == "Inserted Success") {
           AwesomeDialog(
@@ -48,7 +53,9 @@ class _SignupPageState extends State<SignupPage> {
             title: 'Warbixin',
             desc: 'Inserted Success',
             // btnCancelOnPress: () {},
-            btnOkOnPress: () {},
+            btnOkOnPress: () {
+              Navigator.pop(context);
+            },
           ).show();
           Clear();
         } else if (jsonData["message"] == "User already exists") {
@@ -63,7 +70,12 @@ class _SignupPageState extends State<SignupPage> {
           ).show();
         }
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setState(() {
+        isLoading = false; // Set loading state to false
+      });
+    }
   }
 
   @override
@@ -248,7 +260,7 @@ class _SignupPageState extends State<SignupPage> {
                         if (passwordController.text ==
                             confirmPasswordController.text) {
                           // Passwords match, proceed with signup
-                          startSignUp();
+                          await startSignUp();
                         } else {
                           // Passwords do not match, show an error
                           AwesomeDialog(
@@ -262,7 +274,16 @@ class _SignupPageState extends State<SignupPage> {
                         }
                       }
                     },
-                    child: Text('Signup'),
+                    child: isLoading
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : Text('Signup'),
                   ),
                   SizedBox(height: 15),
                   TextButton(

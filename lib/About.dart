@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AboutTeamPage extends StatelessWidget {
@@ -51,7 +49,7 @@ class AboutTeamPage extends StatelessWidget {
                   _buildTeamMember(
                     name: "Ubeyd Abdi Sheikh",
                     jobTitle: "Leader",
-                    imageUrl: "Images/Obaid.png",
+                    imageUrl: "Images/Obaid2.jpg",
                   ),
                   _buildTeamMember(
                     name: "Mohamed Ahmed Isse",

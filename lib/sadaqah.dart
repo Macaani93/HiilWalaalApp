@@ -73,7 +73,8 @@ class _SadaqahFormState extends State<SadaqahForm> {
 
   TextEditingController _amount = TextEditingController();
   Future<void> startSending(String CharityID) async {
-    String apiUrl = "http://" + apiLogin + "/flutterApi/Sadaqah.php";
+    // String apiUrl = "http://" + apiLogin + "/flutterApi/Sadaqah.php";
+    String apiUrl = apiDomain + "Sadaqah.php";
 
     try {
       var response = await http.post(Uri.parse(apiUrl), body: {

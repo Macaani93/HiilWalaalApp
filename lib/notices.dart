@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hilwalal_app/Api/api.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
 
 class Notice {
@@ -77,7 +78,8 @@ class _NoticesPageState extends State<NoticesPage> {
 
   Future<void> fetchNoticesData() async {
     try {
-      String apiUrl = "http://" + apiLogin + "/flutterApi/notices.php";
+      // String apiUrl = "http://" + apiLogin + "/flutterApi/notices.php";
+      String apiUrl = apiDomain + "notices.php";
       var response = await http.post(Uri.parse(apiUrl), body: {
         'userID':
             UserID ?? '', // Provide a default value for UserID if it is null

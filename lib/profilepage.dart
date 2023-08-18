@@ -1,17 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hilwalal_app/Api/Sessions.dart';
 import 'package:hilwalal_app/Api/api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -41,6 +38,15 @@ class _ProfilePageState extends State<ProfilePage> {
     SumOfBloodDonors = prefs.getString('SumBloodDonors') ?? '';
     Phone = prefs.getString('Phone') ?? '';
     UserID = prefs.getString('ID') ?? '';
+    String? base64Image = prefs.getString('Image');
+    // print('')
+    if (base64Image != null && base64Image.isNotEmpty) {
+      List<int> imageBytes = base64Decode(base64Image);
+      setState(() {
+        _selectedImage = File.fromRawPath(Uint8List.fromList(imageBytes));
+      });
+    }
+    print(_selectedImage);
     //bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     setState(() {
       this.UserID = UserID;
@@ -95,18 +101,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 SingleChildScrollView(
                   child: Column(
                     children: [
-                      // Padding(
-                      //   padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-                      //   child: Text(
-                      //     "Profile",
-                      //     style: TextStyle(
-                      //       fontSize: 35,
-                      //       letterSpacing: 1.5,
-                      //       color: Colors.white,
-                      //       fontWeight: FontWeight.w600,
-                      //     ),
-                      //   ),
-                      // ),
+                      SizedBox(
+                        height: 50,
+                      ),
                       GestureDetector(
                         onTap: () {
                           _showImagePickerDialog(); // Function to show the image picker dialog
@@ -117,9 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               radius: 100,
                               backgroundImage: _selectedImage != null
                                   ? Image.file(_selectedImage!).image
-                                  : AssetImage(
-                                      'Images/profile.png',
-                                    ),
+                                  : AssetImage('Images/profile.png'),
                             ),
                             Positioned(
                               bottom: 0,
@@ -213,9 +208,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                     onPressed: () {
                                       //print(Name.text);
                                       Future<void> Update() async {
-                                        String apiUrl = "http://" +
-                                            apiLogin +
-                                            "/flutterApi/ProfileUpdate.php";
+                                        // String apiUrl = "http://" +
+                                        //     apiLogin +
+                                        //     "/flutterApi/ProfileUpdate.php";
+                                        String apiUrl =
+                                            apiDomain + "ProfileUpdate.php";
 
                                         try {
                                           var response = await http
@@ -349,9 +346,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     onPressed: () {
                                       Future<void> Update() async {
-                                        String apiUrl = "http://" +
-                                            apiLogin +
-                                            "/flutterApi/ProfileUpdate.php";
+                                        String apiUrl =
+                                            apiDomain + "ProfileUpdate.php";
+                                        // String apiUrl = "http://" +
+                                        //     apiLogin +
+                                        //     "/flutterApi/ProfileUpdate.php";
 
                                         try {
                                           var response = await http
@@ -477,9 +476,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     onPressed: () {
                                       Future<void> Update() async {
-                                        String apiUrl = "http://" +
-                                            apiLogin +
-                                            "/flutterApi/ProfileUpdate.php";
+                                        // String apiUrl = "http://" +
+                                        //     apiLogin +
+                                        //     "/flutterApi/ProfileUpdate.php";
+                                        String apiUrl =
+                                            apiDomain + "ProfileUpdate.php";
                                         try {
                                           var response = await http
                                               .post(Uri.parse(apiUrl), body: {
@@ -606,10 +607,59 @@ class _ProfilePageState extends State<ProfilePage> {
     final pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile != null) {
+      final File imageFile = File(pickedFile.path);
       setState(() {
-        _selectedImage = File(pickedFile.path);
+        _selectedImage = imageFile;
       });
+
+      // Send the image file to the API
+      await _sendImageToAPI(imageFile);
     }
   }
-  // ... (existing code)
+
+  Future<void> _sendImageToAPI(File imageFile) async {
+    try {
+      // Read the image file as bytes
+      List<int> imageBytes = await imageFile.readAsBytes();
+
+      // Encode the bytes as base64
+      String base64Image = base64Encode(imageBytes);
+
+      // Create the API request body
+      Map<String, dynamic> requestBody = {
+        'image': base64Image,
+        'UserID': UserID
+      };
+
+      // Send the API request
+      final response = await http.post(
+        // Uri.parse('http://' + apiLogin + '/flutterApi/ImageSave.php'),
+        Uri.parse(apiDomain + 'ImageSave.php'),
+        body: requestBody,
+      );
+
+      // Check the response status
+      var jsonData = json.decode(response.body);
+      // print(jsonData);
+
+      if (jsonData["message"] == "Updated Success") {
+        // _Clear();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Image changed successfully."),
+          ),
+        );
+        // Clear();
+      } else if (jsonData["message"] == "Password is Incorrect") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Image is Incorrect."),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle error case
+      print('Error uploading image: $e');
+    }
+  }
 }

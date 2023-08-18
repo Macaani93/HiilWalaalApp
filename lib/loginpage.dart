@@ -1,18 +1,13 @@
 import 'dart:convert';
-import 'dart:math';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hilwalal_app/Api/Sessions.dart';
-import 'package:hilwalal_app/Dashboard2.dart';
-import 'package:hilwalal_app/ForgotPassword.dart';
-import 'package:hilwalal_app/homepage.dart';
-import 'package:hilwalal_app/sidebar.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hilwalal_app/Api/api.dart';
+import 'package:hilwalal_app/Dashboard2.dart';
 import 'package:hilwalal_app/signuppage.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'dashboard.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,11 +20,89 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController password = TextEditingController();
   Color errorColor = Colors.red.shade100;
   String errorMessage = '';
+  bool isLoading = false;
   bool hasUserNameEntered = false;
   bool hasPasswordEntered = false;
   Future<void> setLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
+  }
+
+  Future<void> startLogin() async {
+    setState(() {
+      isLoading = true; // Set loading state to true
+    });
+
+    String apiUrl = apiDomain + 'Login.php';
+    try {
+      // var dio = Dio();
+      var response = await http.post(Uri.parse(apiUrl), body: {
+        'username': userName.text,
+        'password': password.text,
+      });
+
+      if (response.statusCode == 200) {
+        var jsonData = json.decode(response.body);
+
+        if (jsonData["message"] == "Login successful") {
+          await setLoggedIn();
+
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('SumBloodDonors', jsonData['SumBloodDonors']);
+          await prefs.setString('Name', jsonData['Role']['Name']);
+          await prefs.setString('Password', jsonData['Role']['Password']);
+          await prefs.setString('Image', jsonData['Image']);
+          await prefs.setString('Address', jsonData['Role']['Address']);
+          await prefs.setString('Phone', jsonData['Role']['Phone']);
+          await prefs.setString('ID', jsonData['Role']['ID']);
+          await prefs.setString('Role', jsonData['Role']['Role']);
+          await prefs.setString('SumCharity', jsonData['SumCharity']);
+          await prefs.setString('SumBloodDonated', jsonData['SumBloodDonated']);
+          await prefs.setString(
+              'SumBloodDonorNotApproved', jsonData['SumBloodDonorNotApproved']);
+          await prefs.setString('Notices', jsonData['Notices']);
+          await prefs.setString('HospitalUsers', jsonData['HospitalUsers']);
+          if (jsonData['Role']['Role'] == 'Hospital') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Dashboard2()),
+            );
+          } else if (jsonData['Role']['Role'] == 'Admin') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                    "Admin is Allowed only For Web.........................."),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Dashboard()),
+            );
+          }
+        } else {
+          setState(() {
+            errorMessage = jsonData["message"];
+            hasUserNameEntered = false;
+            hasPasswordEntered = false;
+          });
+        }
+      } else {
+        setState(() {
+          errorMessage = "Error";
+        });
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = "Error: " + e.toString();
+        hasUserNameEntered = false;
+        hasPasswordEntered = false;
+      });
+    } finally {
+      setState(() {
+        isLoading = false; // Set loading state to false
+      });
+    }
   }
 
   @override
@@ -171,91 +244,6 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
-                    Future<void> startLogin() async {
-                      String apiUrl =
-                          "http://" + apiLogin + "/flutterApi/Login.php";
-
-                      try {
-                        var response =
-                            await http.post(Uri.parse(apiUrl), body: {
-                          'username': userName.text,
-                          'password': password.text,
-                        });
-
-                        if (response.statusCode == 200) {
-                          var jsonData = json.decode(response.body);
-
-                          if (jsonData["message"] == "Login successful") {
-                            await setLoggedIn();
-
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            await prefs.setString(
-                                'SumBloodDonors', jsonData['SumBloodDonors']);
-                            await prefs.setString(
-                                'Name', jsonData['Role']['Name']);
-                            await prefs.setString(
-                                'Password', jsonData['Role']['Password']);
-                            await prefs.setString(
-                                'Address', jsonData['Role']['Address']);
-                            await prefs.setString(
-                                'Phone', jsonData['Role']['Phone']);
-                            await prefs.setString('ID', jsonData['Role']['ID']);
-                            await prefs.setString(
-                                'Role', jsonData['Role']['Role']);
-                            await prefs.setString(
-                                'SumCharity', jsonData['SumCharity']);
-                            await prefs.setString(
-                                'SumBloodDonated', jsonData['SumBloodDonated']);
-                            await prefs.setString('SumBloodDonorNotApproved',
-                                jsonData['SumBloodDonorNotApproved']);
-                            await prefs.setString(
-                                'Notices', jsonData['Notices']);
-                            await prefs.setString(
-                                'HospitalUsers', jsonData['HospitalUsers']);
-                            if (jsonData['Role']['Role'] == 'Hospital') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Dashboard2()),
-                              );
-                            } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Dashboard()),
-                              );
-                            }
-
-                            // SetSumOFBloodDOnor(jsonData['SumBloodDonors']);
-                            // SetFullName(jsonData['Role']['Name']);
-                            // SetAddress(jsonData['Role']['Address']);
-                            // SetPhone(jsonData['Role']['Phone']);
-                            // SetUser(jsonData['Role']['ID']);
-                            // setRole(jsonData['Role']['Role']);
-                          } else {
-                            setState(() {
-                              errorMessage = jsonData["message"];
-                              hasUserNameEntered = false;
-                              hasPasswordEntered = false;
-                            });
-                          }
-                        } else {
-                          setState(() {
-                            errorMessage = "Error";
-
-                            //response.reasonPhrase;
-                          });
-                        }
-                      } catch (e) {
-                        setState(() {
-                          errorMessage = "Error: " + e.toString();
-                          hasUserNameEntered = false;
-                          hasPasswordEntered = false;
-                        });
-                      }
-                    }
-
                     if (userName.text.isEmpty || password.text.isEmpty) {
                       setState(() {
                         errorMessage =
@@ -264,35 +252,48 @@ class _LoginPageState extends State<LoginPage> {
                         hasPasswordEntered = false;
                       });
                     } else {
+                      setState(() {
+                        errorMessage = '';
+                        isLoading = true; // Set loading state to true
+                      });
                       startLogin();
                     }
                   },
-                  child: Text(
-                    'Login',
-                    style: TextStyle(fontSize: 20),
-                  ),
+                  child: isLoading
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : Text(
+                          'Login',
+                          style: TextStyle(fontSize: 20),
+                        ),
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(200, 50),
                     primary: Colors.green,
                   ),
                 ),
-                SizedBox(height: 1),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ForgetPasswordPage()),
-                    );
-                  },
-                  child: Text(
-                    "Forget Password",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
+                // SizedBox(height: 1),
+                // TextButton(
+                //   onPressed: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => ForgetPasswordPage()),
+                //     );
+                //   },
+                //   child: Text(
+                //     "Forget Password",
+                //     style: TextStyle(
+                //       fontSize: 16,
+                //       color: Colors.blue,
+                //     ),
+                //   ),
+                // ),
                 // SizedBox(height: 2),
                 TextButton(
                   onPressed: () {

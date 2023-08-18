@@ -79,12 +79,9 @@ class _ChariyahDashState extends State<ChariyahDash> {
   }
 
   Future<void> fetchData() async {
-    String URL = "http://" + apiLogin + "/flutterApi/ChariyahData.php";
+    // String URL = "http://" + apiLogin + "/flutterApi/ChariyahData.php";
+    String URL = apiDomain + "ChariyahData.php";
     try {
-      // var response = await http.post(Uri.parse(URL), body: {
-      //   'ID': UserID,
-      //   'NewPassword': _confirmController.text,
-      // });
       final response = await http.post(Uri.parse(URL), body: {
         'Type': (widget.Type),
       });
